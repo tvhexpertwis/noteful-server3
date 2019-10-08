@@ -35,9 +35,10 @@ notesRouter
       .catch(next);
   });
 
-notesRouter.route('/:note_id').all((req, res, next) => {
-  NotesService.getNote(req.app.get('db'), req.param.note_id)
-    .then((note) => {
+notesRouter
+  .route('/:note_id')
+  .all((req, res, next) => {
+    NotesService.getNote(req.app.get('db'), req.param.note_id).then((note) => {
       if (!note) {
         return res.status(404).json({
           error: { message: 'Note does not exist' },
@@ -45,17 +46,17 @@ notesRouter.route('/:note_id').all((req, res, next) => {
       }
       res.note = note;
       next();
-    })
-    .get((req, res) => {
-      return res.json(res.note);
-    })
-    .delete((req, res, next) => {
-      NotesService.deleteNote(req.app.get('db'), req.params.note_id)
-        .then(() => {
-          return res.status(204).end();
-        })
-        .catch(next);
     });
-});
+  })
+  .get((req, res) => {
+    return res.json(res.note);
+  })
+  .delete((req, res, next) => {
+    NotesService.deleteNote(req.app.get('db'), req.params.note_id)
+      .then(() => {
+        return res.status(204).end();
+      })
+      .catch(next);
+  });
 
 module.exports = notesRouter;
