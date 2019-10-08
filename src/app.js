@@ -9,6 +9,8 @@ const helmet = require('helmet');
 const { NODE_ENV } = require('./config');
 const validateBearerToken = require('./bin/validateBearerToken');
 const errorHandler = require('./bin/errorHandler');
+const foldersRouter = require('./folders-router');
+const notesRouter = require('./notes-router');
 
 /*******************************************************************
   INIT
@@ -30,6 +32,9 @@ app.use(helmet());
 app.get('/', (req, res) => {
   return res.status(200).end();
 });
+
+app.use('/api/folders', foldersRouter);
+app.use('/api/notes', notesRouter);
 
 /*******************************************************************
   ERROR HANDLING
